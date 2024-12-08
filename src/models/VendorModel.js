@@ -1,14 +1,33 @@
 import sequelize from "../config/config.js";
 
 const Vendor = {
+  // Mendapatkan semua data vendor
   getAllVendors: async () => {
-    const [results] = await sequelize.query("SELECT * FROM vendor_armada");
+    const [results] = await sequelize.query(`
+      SELECT 
+        id_vendor, 
+        nama_vendor, 
+        penanggungjawab_vendor, 
+        jumlah_armada, 
+        status_vendor
+      FROM vendor_armada
+    `);
     return results;
   },
 
+  // Mendapatkan data vendor berdasarkan ID
   getVendorById: async (id_vendor) => {
     const [results] = await sequelize.query(
-      "SELECT * FROM vendor_armada WHERE id_vendor = ?",
+      `
+      SELECT 
+        id_vendor, 
+        nama_vendor, 
+        penanggungjawab_vendor, 
+        jumlah_armada, 
+        status_vendor
+      FROM vendor_armada
+      WHERE id_vendor = ?
+    `,
       {
         replacements: [id_vendor],
       }
@@ -16,20 +35,26 @@ const Vendor = {
     return results[0];
   },
 
+  // Menambahkan data vendor
   addVendor: async (
     nama_vendor,
     penanggungjawab_vendor,
-    telepon_vendor,
     jumlah_armada,
     status_vendor
   ) => {
     const result = await sequelize.query(
-      "INSERT INTO vendor_armada (nama_vendor, penanggungjawab_vendor, telepon_vendor, jumlah_armada, status_ventor) VALUES (?, ?, ?, ?, ?)",
+      `
+      INSERT INTO vendor_armada (
+        nama_vendor, 
+        penanggungjawab_vendor, 
+        jumlah_armada, 
+        status_vendor
+      ) VALUES (?, ?, ?, ?)
+    `,
       {
         replacements: [
           nama_vendor,
           penanggungjawab_vendor,
-          telepon_vendor,
           jumlah_armada,
           status_vendor,
         ],
@@ -38,21 +63,28 @@ const Vendor = {
     return result[0];
   },
 
+  // Mengupdate data vendor
   updateVendor: async (
     id_vendor,
     nama_vendor,
     penanggungjawab_vendor,
-    telepon_vendor,
     jumlah_armada,
     status_vendor
   ) => {
     const result = await sequelize.query(
-      "UPDATE vendor_armada SET nama_vendor = ?, penanggungjawab_vendor = ?, telepon_vendor = ?, jumlah_armada = ?, status_vendor = ? WHERE id_vendor = ?",
+      `
+      UPDATE vendor_armada
+      SET 
+        nama_vendor = ?, 
+        penanggungjawab_vendor = ?, 
+        jumlah_armada = ?, 
+        status_vendor = ?
+      WHERE id_vendor = ?
+    `,
       {
         replacements: [
           nama_vendor,
           penanggungjawab_vendor,
-          telepon_vendor,
           jumlah_armada,
           status_vendor,
           id_vendor,
@@ -62,32 +94,17 @@ const Vendor = {
     return result[0];
   },
 
+  // Menghapus data vendor
   deleteVendor: async (id_vendor) => {
     const result = await sequelize.query(
-      "DELETE FROM vendor_armada WHERE id_vendor = ?",
+      `
+      DELETE FROM vendor_armada WHERE id_vendor = ?
+    `,
       {
         replacements: [id_vendor],
       }
     );
     return result[0];
-  },
-
-  getVendorCount: async () => {
-    const [results] = await sequelize.query(
-      "SELECT COUNT(*) AS count FROM vendor_armada"
-    );
-    return results[0].count;
-  },
-
-  searchVendorByName: async (keyword) => {
-    const [results] = await sequelize.query(
-      "SELECT * FROM vendor_armada WHERE nama_vendor LIKE :keyword",
-      {
-        replacements: { keyword: `%${keyword}%` },
-        type: sequelize.QueryTypes.SELECT,
-      }
-    );
-    return results;
   },
 };
 

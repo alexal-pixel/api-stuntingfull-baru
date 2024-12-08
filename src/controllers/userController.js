@@ -1,6 +1,7 @@
 import User from "../models/UserModel.js";
 import bcrypt from "bcryptjs";
 
+// Mendapatkan semua data user
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.getAllUsers();
@@ -19,13 +20,21 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-export const getUserData = async (req, res) => {
-  const userId = req.user.id;
+// Mendapatkan data user berdasarkan ID
+export const getUserById = async (req, res) => {
+  const { id_user } = req.params;
   try {
-    const userData = await User.getUserById(userId);
+    const user = await User.getUserById(id_user);
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        data: null,
+        message: "User not found.",
+      });
+    }
     res.json({
       status: "success",
-      data: userData,
+      data: user,
       message: "User data fetched successfully.",
     });
   } catch (error) {
@@ -38,6 +47,7 @@ export const getUserData = async (req, res) => {
   }
 };
 
+// Membuat user baru
 export const createUser = async (req, res) => {
   const {
     id_hak_akses,
@@ -48,6 +58,7 @@ export const createUser = async (req, res) => {
     nomor_telepon,
     alamat_user,
     status_user,
+    nama_lengkap,
   } = req.body;
 
   try {
@@ -57,11 +68,12 @@ export const createUser = async (req, res) => {
       id_hak_akses,
       id_kantor,
       username,
-      password,
+      hashedPassword,
       nama_user,
       nomor_telepon,
       alamat_user,
-      status_user
+      status_user,
+      nama_lengkap
     );
 
     res.status(201).json({
@@ -78,6 +90,8 @@ export const createUser = async (req, res) => {
     });
   }
 };
+
+// Mengupdate data user
 export const updateUser = async (req, res) => {
   const { id_user } = req.params;
   const {
@@ -89,19 +103,25 @@ export const updateUser = async (req, res) => {
     nomor_telepon,
     alamat_user,
     status_user,
+    nama_lengkap,
   } = req.body;
 
   try {
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
     await User.updateUser(
+      id_user,
       id_hak_akses,
       id_kantor,
       username,
-      password,
+      hashedPassword,
       nama_user,
       nomor_telepon,
       alamat_user,
-      status_user
+      status_user,
+      nama_lengkap
     );
+
     res.json({
       status: "success",
       data: null,
@@ -117,6 +137,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
+// Menghapus user berdasarkan ID
 export const deleteUser = async (req, res) => {
   const { id_user } = req.params;
 
