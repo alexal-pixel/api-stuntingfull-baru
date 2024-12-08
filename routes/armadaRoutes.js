@@ -4,28 +4,17 @@ import * as authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Routes for vendor with authentication and authorization middleware
+// Route untuk environment production dengan autentikasi dan otorisasi
 router.get(
   "/armada",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(1),
-  armadaController.getAllArmadas
-);
-router.get(
-  "/armada/count",
-  authMiddleware.authenticate,
-  authMiddleware.authorizeRole(1),
-  armadaController.getArmadaCount
-);
-router.get(
-  "/armada/search",
-  authMiddleware.authenticate,
-  authMiddleware.authorizeRole(1),
-  armadaController.searchArmadaByName
+  armadaController.getAllArmada
 );
 router.get(
   "/armada/:id_armada",
   authMiddleware.authenticate,
+  authMiddleware.authorizeRole(1),
   armadaController.getArmadaById
 );
 router.post(
@@ -47,10 +36,8 @@ router.delete(
   armadaController.deleteArmada
 );
 
-// Development routes for vendor without middleware (for testing purposes)
-router.get("/dev/armada", armadaController.getAllArmadas);
-router.get("/dev/armada/search", armadaController.searchArmadaByName);
-router.get("/dev/armada/count", armadaController.getArmadaCount);
+// Route untuk environment development tanpa autentikasi
+router.get("/dev/armada", armadaController.getAllArmada);
 router.get("/dev/armada/:id_armada", armadaController.getArmadaById);
 router.post("/dev/armada", armadaController.createArmada);
 router.put("/dev/armada/:id_armada", armadaController.updateArmada);

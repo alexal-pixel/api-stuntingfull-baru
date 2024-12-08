@@ -1,5 +1,6 @@
 import Armada from "../models/ArmadaModel.js";
 
+// Mendapatkan semua data armada
 export const getAllArmadas = async (req, res) => {
   try {
     const armadas = await Armada.getAllArmadas();
@@ -9,7 +10,7 @@ export const getAllArmadas = async (req, res) => {
       message: "Armadas fetched successfully.",
     });
   } catch (error) {
-    console.error("Error fetching Armadas data:", error);
+    console.error("Error fetching armada data:", error);
     res.status(500).json({
       status: "error",
       data: null,
@@ -18,11 +19,12 @@ export const getAllArmadas = async (req, res) => {
   }
 };
 
+// Mendapatkan data armada berdasarkan ID
 export const getArmadaById = async (req, res) => {
   const { id_armada } = req.params;
   try {
-    const armadaData = await Armada.getArmadaById(id_armada);
-    if (!armadaData) {
+    const armada = await Armada.getArmadaById(id_armada);
+    if (!armada) {
       return res.status(404).json({
         status: "error",
         data: null,
@@ -31,11 +33,11 @@ export const getArmadaById = async (req, res) => {
     }
     res.json({
       status: "success",
-      data: armadaData,
+      data: armada,
       message: "Armada data fetched successfully.",
     });
   } catch (error) {
-    console.error("Error fetching Armada data:", error);
+    console.error("Error fetching armada data:", error);
     res.status(500).json({
       status: "error",
       data: null,
@@ -44,6 +46,7 @@ export const getArmadaById = async (req, res) => {
   }
 };
 
+// Membuat armada baru
 export const createArmada = async (req, res) => {
   const { id_vendor, id_jenis_mobil, nopol_mobil_armada, status_armada } =
     req.body;
@@ -55,14 +58,10 @@ export const createArmada = async (req, res) => {
       nopol_mobil_armada,
       status_armada
     );
+
     res.status(201).json({
       status: "success",
-      data: {
-        id_vendor,
-        id_jenis_mobil,
-        nopol_mobil_armada,
-        status_armada,
-      },
+      data: { id_vendor, id_jenis_mobil, nopol_mobil_armada, status_armada },
       message: "Armada created successfully.",
     });
   } catch (error) {
@@ -75,33 +74,28 @@ export const createArmada = async (req, res) => {
   }
 };
 
+// Mengupdate data armada
 export const updateArmada = async (req, res) => {
   const { id_armada } = req.params;
   const { id_vendor, id_jenis_mobil, nopol_mobil_armada, status_armada } =
     req.body;
 
   try {
-    const result = await Armada.updateArmada(
+    await Armada.updateArmada(
       id_armada,
       id_vendor,
       id_jenis_mobil,
       nopol_mobil_armada,
       status_armada
     );
-    if (result === 0) {
-      return res.status(404).json({
-        status: "error",
-        data: null,
-        message: "Armada not found.",
-      });
-    }
+
     res.json({
       status: "success",
       data: null,
       message: "Armada updated successfully.",
     });
   } catch (error) {
-    console.error("Error updating Armada:", error);
+    console.error("Error updating armada:", error);
     res.status(500).json({
       status: "error",
       data: null,
@@ -110,18 +104,12 @@ export const updateArmada = async (req, res) => {
   }
 };
 
+// Menghapus armada berdasarkan ID
 export const deleteArmada = async (req, res) => {
   const { id_armada } = req.params;
 
   try {
-    const result = await Armada.deleteArmada(id_armada);
-    if (result === 0) {
-      return res.status(404).json({
-        status: "error",
-        data: null,
-        message: "Armada not found.",
-      });
-    }
+    await Armada.deleteArmada(id_armada);
     res.json({
       status: "success",
       data: null,
@@ -132,44 +120,6 @@ export const deleteArmada = async (req, res) => {
     res.status(500).json({
       status: "error",
       data: null,
-      message: "Internal Server Error",
-    });
-  }
-};
-
-export const getArmadaCount = async (req, res) => {
-  try {
-    const count = await Armada.getArmadaCount();
-    res.json({
-      status: "success",
-      data: { count },
-      message: "Armada count fetched successfully.",
-    });
-  } catch (error) {
-    console.error("Error fetching Armada count:", error);
-    res.status(500).json({
-      status: "error",
-      data: null,
-      message: "Internal Server Error",
-    });
-  }
-};
-
-export const searchArmadaByName = async (req, res) => {
-  const { nopol_mobil_armada } = req.query;
-  try {
-    const armadas = await Armada.searchArmadaByName(nopol_mobil_armada);
-    const responseData = Array.isArray(armadas) ? armadas : [armadas];
-    res.json({
-      status: "success",
-      data: responseData,
-      message: "Armada fetched successfully.",
-    });
-  } catch (error) {
-    console.error("Error fetching Armada data:", error);
-    res.status(500).json({
-      status: "error",
-      data: "",
       message: "Internal Server Error",
     });
   }
