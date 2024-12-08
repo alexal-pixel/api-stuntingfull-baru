@@ -1,23 +1,23 @@
 import sequelize from "../config/config.js";
 
 const Armada = {
-  // Mendapatkan semua data armada dengan join tabel vendor_armada dan jenis_mobil
+  // Mendapatkan semua data armada dengan join tabel vendor dan jenis_mobil
   getAllArmadas: async () => {
     const [results] = await sequelize.query(`
       SELECT 
         armada.id_armada, 
         armada.nopol_mobil_armada, 
         armada.status_armada, 
-        vendor_armada.nama_vendor, 
+        vendor.nama_vendor, 
         jenis_mobil.nama_jenis_mobil
       FROM armada
-      LEFT JOIN vendor_armada ON armada.id_vendor = vendor_armada.id_vendor
+      LEFT JOIN vendor ON armada.id_vendor = vendor.id_vendor
       LEFT JOIN jenis_mobil ON armada.id_jenis_mobil = jenis_mobil.id_jenis_mobil
     `);
     return results;
   },
 
-  // Mendapatkan data armada berdasarkan ID dengan join tabel vendor_armada dan jenis_mobil
+  // Mendapatkan data armada berdasarkan ID dengan join tabel vendor dan jenis_mobil
   getArmadaById: async (id_armada) => {
     const [results] = await sequelize.query(
       `
@@ -25,10 +25,10 @@ const Armada = {
         armada.id_armada, 
         armada.nopol_mobil_armada, 
         armada.status_armada, 
-        vendor_armada.nama_vendor, 
+        vendor.nama_vendor, 
         jenis_mobil.nama_jenis_mobil
       FROM armada
-      LEFT JOIN vendor_armada ON armada.id_vendor = vendor_armada.id_vendor
+      LEFT JOIN vendor ON armada.id_vendor = vendor.id_vendor
       LEFT JOIN jenis_mobil ON armada.id_jenis_mobil = jenis_mobil.id_jenis_mobil
       WHERE armada.id_armada = ?
     `,
@@ -39,7 +39,7 @@ const Armada = {
     return results[0];
   },
 
-  // Menambahkan data armada baru
+  // Menambahkan data armada
   addArmada: async (
     id_vendor,
     id_jenis_mobil,
@@ -95,7 +95,7 @@ const Armada = {
     return result[0];
   },
 
-  // Menghapus data armada berdasarkan ID
+  // Menghapus data armada
   deleteArmada: async (id_armada) => {
     const result = await sequelize.query(
       `

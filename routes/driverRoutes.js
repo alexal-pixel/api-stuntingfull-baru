@@ -1,46 +1,46 @@
 import express from "express";
-import * as armadaController from "../controllers/armadaController.js";
+import * as driverController from "../controllers/driverController.js";
 import * as authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 // Route untuk environment production dengan autentikasi dan otorisasi
 router.get(
-  "/armada",
+  "/driver",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(1),
-  armadaController.getAllArmadas
+  driverController.getAllDrivers
 );
 router.get(
-  "/armada/:id_armada",
+  "/driver/:id_driver",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(1),
-  armadaController.getArmadaById
+  driverController.getDriverById
 );
 router.post(
-  "/armada",
+  "/driver",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(1),
-  armadaController.createArmada
+  driverController.createDriver
 );
 router.put(
-  "/armada/:id_armada",
+  "/driver/:id_driver",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(1),
-  armadaController.updateArmada
+  driverController.updateDriver
 );
 router.delete(
-  "/armada/:id_armada",
+  "/driver/:id_driver",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(1),
-  armadaController.deleteArmada
+  driverController.deleteDriver
 );
 
 // Route untuk environment development tanpa autentikasi
-router.get("/dev/armada", armadaController.getAllArmadas);
-router.get("/dev/armada/:id_armada", armadaController.getArmadaById);
-router.post("/dev/armada", armadaController.createArmada);
-router.put("/dev/armada/:id_armada", armadaController.updateArmada);
-router.delete("/dev/armada/:id_armada", armadaController.deleteArmada);
+router.get("/dev/driver", driverController.getAllDrivers);
+router.get("/dev/driver/:id_driver", driverController.getDriverById);
+router.post("/dev/driver", driverController.createDriver);
+router.put("/dev/driver/:id_driver", driverController.updateDriver);
+router.delete("/dev/driver/:id_driver", driverController.deleteDriver);
 
 export default router;

@@ -13,7 +13,7 @@ const User = {
         users.alamat_user, 
         users.status_user, 
         users.nama_lengkap, 
-        hak_akses.nama_hak_akses, 
+        hak_akses.id_hak_akses, 
         kantor.nama_kantor
       FROM users
       LEFT JOIN hak_akses ON users.id_hak_akses = hak_akses.id_hak_akses
@@ -35,7 +35,7 @@ const User = {
         users.alamat_user, 
         users.status_user, 
         users.nama_lengkap, 
-        hak_akses.nama_hak_akses, 
+        hak_akses.id_hak_akses, 
         kantor.nama_kantor
       FROM users
       LEFT JOIN hak_akses ON users.id_hak_akses = hak_akses.id_hak_akses

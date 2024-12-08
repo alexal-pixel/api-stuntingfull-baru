@@ -5,6 +5,7 @@ import hakaksesRoutes from "./routes/hakaksesRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import vendorRoutes from "./routes/vendorRoutes.js";
 import armadaRoutes from "./routes/armadaRoutes.js";
+import driverRoutes from "./routes/driverRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +25,7 @@ const init = async () => {
     app.use("/api", userRoutes);
     app.use("/api", vendorRoutes);
     app.use("/api", armadaRoutes);
+    app.use("/api", driverRoutes);
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);

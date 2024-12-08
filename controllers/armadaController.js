@@ -51,6 +51,11 @@ export const createArmada = async (req, res) => {
   const { id_vendor, id_jenis_mobil, nopol_mobil_armada, status_armada } =
     req.body;
 
+  console.log("id vendor:", id_vendor);
+  console.log("id jenis mobil:", id_jenis_mobil);
+  console.log("nopol :", nopol_mobil_armada);
+  console.log("Status :", status_armada);
+
   try {
     await Armada.addArmada(
       id_vendor,
@@ -58,7 +63,6 @@ export const createArmada = async (req, res) => {
       nopol_mobil_armada,
       status_armada
     );
-
     res.status(201).json({
       status: "success",
       data: { id_vendor, id_jenis_mobil, nopol_mobil_armada, status_armada },
@@ -88,7 +92,6 @@ export const updateArmada = async (req, res) => {
       nopol_mobil_armada,
       status_armada
     );
-
     res.json({
       status: "success",
       data: null,

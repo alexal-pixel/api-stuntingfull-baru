@@ -1,5 +1,6 @@
 import Driver from "../models/DriverModel.js";
 
+// Mendapatkan semua data driver
 export const getAllDrivers = async (req, res) => {
   try {
     const drivers = await Driver.getAllDrivers();
@@ -18,11 +19,12 @@ export const getAllDrivers = async (req, res) => {
   }
 };
 
+// Mendapatkan data driver berdasarkan ID
 export const getDriverById = async (req, res) => {
   const { id_driver } = req.params;
   try {
-    const driverData = await Driver.getDriverById(id_driver);
-    if (!driverData) {
+    const driver = await Driver.getDriverById(id_driver);
+    if (!driver) {
       return res.status(404).json({
         status: "error",
         data: null,
@@ -31,7 +33,7 @@ export const getDriverById = async (req, res) => {
     }
     res.json({
       status: "success",
-      data: driverData,
+      data: driver,
       message: "Driver data fetched successfully.",
     });
   } catch (error) {
@@ -44,50 +46,21 @@ export const getDriverById = async (req, res) => {
   }
 };
 
+// Membuat driver baru
 export const createDriver = async (req, res) => {
-  const {
-    id_user,
-    id_vendor,
-    nik,
-    telpon_driver,
-    nama_kontak_darurat_driver,
-    telpon_kontak_darurat_driver,
-    masa_berlaku_sim,
-    foto_driver,
-    foto_ktp_driver,
-    foto_sim_driver,
-    status_driver,
-  } = req.body;
+  const { id_user, id_vendor, nama_driver, nomor_telepon_driver } = req.body;
 
   try {
     await Driver.addDriver(
       id_user,
       id_vendor,
-      nik,
-      telpon_driver,
-      nama_kontak_darurat_driver,
-      telpon_kontak_darurat_driver,
-      masa_berlaku_sim,
-      foto_driver,
-      foto_ktp_driver,
-      foto_sim_driver,
-      status_driver
+      nama_driver,
+      nomor_telepon_driver
     );
+
     res.status(201).json({
       status: "success",
-      data: {
-        id_user,
-        id_vendor,
-        nik,
-        telpon_driver,
-        nama_kontak_darurat_driver,
-        telpon_kontak_darurat_driver,
-        masa_berlaku_sim,
-        foto_driver,
-        foto_ktp_driver,
-        foto_sim_driver,
-        status_driver,
-      },
+      data: { nama_driver, nomor_telepon_driver },
       message: "Driver created successfully.",
     });
   } catch (error) {
@@ -100,44 +73,20 @@ export const createDriver = async (req, res) => {
   }
 };
 
+// Mengupdate data driver
 export const updateDriver = async (req, res) => {
   const { id_driver } = req.params;
-  const {
-    id_user,
-    id_vendor,
-    nik,
-    telpon_driver,
-    nama_kontak_darurat_driver,
-    telpon_kontak_darurat_driver,
-    masa_berlaku_sim,
-    foto_driver,
-    foto_ktp_driver,
-    foto_sim_driver,
-    status_driver,
-  } = req.body;
+  const { id_user, id_vendor, nama_driver, nomor_telepon_driver } = req.body;
 
   try {
-    const result = await Driver.updateDriver(
+    await Driver.updateDriver(
       id_driver,
       id_user,
       id_vendor,
-      nik,
-      telpon_driver,
-      nama_kontak_darurat_driver,
-      telpon_kontak_darurat_driver,
-      masa_berlaku_sim,
-      foto_driver,
-      foto_ktp_driver,
-      foto_sim_driver,
-      status_driver
+      nama_driver,
+      nomor_telepon_driver
     );
-    if (result === 0) {
-      return res.status(404).json({
-        status: "error",
-        data: null,
-        message: "Driver not found.",
-      });
-    }
+
     res.json({
       status: "success",
       data: null,
@@ -153,18 +102,12 @@ export const updateDriver = async (req, res) => {
   }
 };
 
+// Menghapus driver berdasarkan ID
 export const deleteDriver = async (req, res) => {
   const { id_driver } = req.params;
 
   try {
-    const result = await Driver.deleteDriver(id_driver);
-    if (result === 0) {
-      return res.status(404).json({
-        status: "error",
-        data: null,
-        message: "Driver not found.",
-      });
-    }
+    await Driver.deleteDriver(id_driver);
     res.json({
       status: "success",
       data: null,
@@ -172,44 +115,6 @@ export const deleteDriver = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting driver:", error);
-    res.status(500).json({
-      status: "error",
-      data: null,
-      message: "Internal Server Error",
-    });
-  }
-};
-
-export const getDriverCount = async (req, res) => {
-  try {
-    const count = await Driver.getDriverCount();
-    res.json({
-      status: "success",
-      data: { count },
-      message: "Driver count fetched successfully.",
-    });
-  } catch (error) {
-    console.error("Error fetching driver count:", error);
-    res.status(500).json({
-      status: "error",
-      data: null,
-      message: "Internal Server Error",
-    });
-  }
-};
-
-export const searchDriverByName = async (req, res) => {
-  const { nama_lengkap } = req.query;
-  try {
-    const drivers = await Driver.searchDriverByName(nama_lengkap);
-    const responseData = Array.isArray(drivers) ? drivers : [drivers];
-    res.json({
-      status: "success",
-      data: responseData,
-      message: "Drivers fetched successfully.",
-    });
-  } catch (error) {
-    console.error("Error fetching drivers data:", error);
     res.status(500).json({
       status: "error",
       data: null,
