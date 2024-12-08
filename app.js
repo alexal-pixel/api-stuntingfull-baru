@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import vendorRoutes from "./routes/vendorRoutes.js";
 import armadaRoutes from "./routes/armadaRoutes.js";
 import driverRoutes from "./routes/driverRoutes.js";
+import jenismobilRoutes from "./routes/jenismobilRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ const init = async () => {
     app.use("/api", vendorRoutes);
     app.use("/api", armadaRoutes);
     app.use("/api", driverRoutes);
+    app.use("/api", jenismobilRoutes);
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
