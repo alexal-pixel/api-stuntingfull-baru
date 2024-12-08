@@ -1,5 +1,6 @@
 import Vendor from "../models/VendorModel.js";
 
+// Mendapatkan semua data vendor
 export const getAllVendors = async (req, res) => {
   try {
     const vendors = await Vendor.getAllVendors();
@@ -18,11 +19,12 @@ export const getAllVendors = async (req, res) => {
   }
 };
 
+// Mendapatkan data vendor berdasarkan ID
 export const getVendorById = async (req, res) => {
   const { id_vendor } = req.params;
   try {
-    const vendorData = await Vendor.getVendorById(id_vendor);
-    if (!vendorData) {
+    const vendor = await Vendor.getVendorById(id_vendor);
+    if (!vendor) {
       return res.status(404).json({
         status: "error",
         data: null,
@@ -31,7 +33,7 @@ export const getVendorById = async (req, res) => {
     }
     res.json({
       status: "success",
-      data: vendorData,
+      data: vendor,
       message: "Vendor data fetched successfully.",
     });
   } catch (error) {
@@ -44,32 +46,22 @@ export const getVendorById = async (req, res) => {
   }
 };
 
+// Membuat vendor baru
 export const createVendor = async (req, res) => {
-  const {
-    nama_vendor,
-    penanggungjawab_vendor,
-    telepon_vendor,
-    jumlah_armada,
-    status_vendor,
-  } = req.body;
+  const { nama_vendor, penanggungjawab_vendor, jumlah_armada, status_vendor } =
+    req.body;
 
   try {
     await Vendor.addVendor(
       nama_vendor,
       penanggungjawab_vendor,
-      telepon_vendor,
       jumlah_armada,
       status_vendor
     );
+
     res.status(201).json({
       status: "success",
-      data: {
-        nama_vendor,
-        penanggungjawab_vendor,
-        telepon_vendor,
-        jumlah_armada,
-        status_vendor,
-      },
+      data: { nama_vendor, penanggungjawab_vendor, jumlah_armada },
       message: "Vendor created successfully.",
     });
   } catch (error) {
@@ -82,33 +74,21 @@ export const createVendor = async (req, res) => {
   }
 };
 
+// Mengupdate data vendor
 export const updateVendor = async (req, res) => {
   const { id_vendor } = req.params;
-  const {
-    nama_vendor,
-    penanggungjawab_vendor,
-    telepon_vendor,
-    jumlah_armada,
-    status_vendor,
-  } = req.body;
+  const { nama_vendor, penanggungjawab_vendor, jumlah_armada, status_vendor } =
+    req.body;
 
   try {
-    const result = await Vendor.updateVendor(
+    await Vendor.updateVendor(
       id_vendor,
       nama_vendor,
-      nama_vendor,
       penanggungjawab_vendor,
-      telepon_vendor,
       jumlah_armada,
       status_vendor
     );
-    if (result === 0) {
-      return res.status(404).json({
-        status: "error",
-        data: null,
-        message: "Vendor not found.",
-      });
-    }
+
     res.json({
       status: "success",
       data: null,
@@ -124,18 +104,12 @@ export const updateVendor = async (req, res) => {
   }
 };
 
+// Menghapus vendor berdasarkan ID
 export const deleteVendor = async (req, res) => {
   const { id_vendor } = req.params;
 
   try {
-    const result = await Vendor.deleteVendor(id_vendor);
-    if (result === 0) {
-      return res.status(404).json({
-        status: "error",
-        data: null,
-        message: "Vendor not found.",
-      });
-    }
+    await Vendor.deleteVendor(id_vendor);
     res.json({
       status: "success",
       data: null,
@@ -146,44 +120,6 @@ export const deleteVendor = async (req, res) => {
     res.status(500).json({
       status: "error",
       data: null,
-      message: "Internal Server Error",
-    });
-  }
-};
-
-export const getVendorCount = async (req, res) => {
-  try {
-    const count = await Vendor.getVendorCount();
-    res.json({
-      status: "success",
-      data: { count },
-      message: "Vendor count fetched successfully.",
-    });
-  } catch (error) {
-    console.error("Error fetching vendor count:", error);
-    res.status(500).json({
-      status: "error",
-      data: null,
-      message: "Internal Server Error",
-    });
-  }
-};
-
-export const searchVendorByName = async (req, res) => {
-  const { nama_vendor } = req.query;
-  try {
-    const vendors = await Vendor.searchVendorByName(nama_vendor);
-    const responseData = Array.isArray(vendors) ? vendors : [vendors];
-    res.json({
-      status: "success",
-      data: responseData,
-      message: "Vendors fetched successfully.",
-    });
-  } catch (error) {
-    console.error("Error fetching vendors data:", error);
-    res.status(500).json({
-      status: "error",
-      data: "",
       message: "Internal Server Error",
     });
   }
