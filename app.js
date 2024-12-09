@@ -9,6 +9,7 @@ import driverRoutes from "./routes/driverRoutes.js";
 import jenismobilRoutes from "./routes/jenismobilRoutes.js";
 import kantorRoutes from "./routes/kantorRoutes.js";
 import suplierRoutes from "./routes/suplierRoutes.js";
+import provinsiRoutes from "./routes/provinsiRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +33,7 @@ const init = async () => {
     app.use("/api", jenismobilRoutes);
     app.use("/api", kantorRoutes);
     app.use("/api", suplierRoutes);
+    app.use("/api", provinsiRoutes);
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
